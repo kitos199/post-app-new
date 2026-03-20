@@ -4,17 +4,25 @@ const authFormPassword = document.querySelector("#auth-form-password");
 const authFormSubmit = document.querySelector("#auth-form-submit");
 const emailEror = document.querySelector("#email-error");
 const passwordError = document.querySelector("#password-error");
-const showPassword = document.querySelector("#show-password");
-const hidePassword = document.querySelector("#hide-password");
+const togglePassworVisibility = document.querySelector("#toggle-passwor-visibility");
 const validationRules = {
   emailRegex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   passwordRegex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{4,}$/,
 };
 
+const users = [
+  {email}
+]
+
 const formValiodation = {
   email: false,
   password: false,
 };
+
+const passwordIcons = {
+  eyeOpen: "url(https://api.iconify.design/streamline:visible.svg?color=%23ffffff)",
+  eyeClose:"url(https://api.iconify.design/streamline:invisible-1.svg?color=%23ffffff)"
+}
 
 const checkSubmitDisabled = function () {
   if (formValiodation.email && formValiodation.password) {
@@ -33,7 +41,9 @@ authForm.addEventListener("submit", (e) => {
     formData.email.match(validationRules.emailRegex) &&
     formData.password.match(validationRules.passwordRegex)
   ) {
-    console.log("yes");
+    useSyncExternalStore.forEach((user) => {
+      
+    })
   }
 });
 
@@ -51,6 +61,11 @@ authFormEmail.addEventListener("input", (e) => {
 });
 
 authFormPassword.addEventListener("input", (e) => {
+  if (e.target.value) {
+    togglePassworVisibility.classList.remove("hidden")
+  } else {
+    togglePassworVisibility.classList.add("hidden")
+  }
   if (e.target.value.match(validationRules.passwordRegex)) {
     formValiodation.password = true;
     passwordError.classList.add("invisible");
@@ -61,8 +76,17 @@ authFormPassword.addEventListener("input", (e) => {
   checkSubmitDisabled();
 });
 
-showPassword.addEventListener("change", (e) => {
-  authFormPassword.type = "text";
-  showPassword.classList.add("hidden");
-  hidePassword.classList.remove("hidden");
+togglePassworVisibility.addEventListener("click", (e) => {
+
+  if (e.target.dataset.visibility == "true") {
+    authFormPassword.type = "password";
+    e.target.dataset.visibility = "false"
+    e.target.style.backgroundImage=passwordIcons.eyeOpen
+  } else {
+    console.log(e.target.dataset.visibility);
+    authFormPassword.type = "text";
+    e.target.dataset.visibility = "true"
+    e.target.style.backgroundImage=passwordIcons.eyeClose
+  }
+  authFormPassword.focus()
 });
