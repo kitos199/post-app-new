@@ -4,15 +4,19 @@ const authFormPassword = document.querySelector("#auth-form-password");
 const authFormSubmit = document.querySelector("#auth-form-submit");
 const emailEror = document.querySelector("#email-error");
 const passwordError = document.querySelector("#password-error");
-const togglePassworVisibility = document.querySelector("#toggle-passwor-visibility");
+const togglePassworVisibility = document.querySelector(
+  "#toggle-passwor-visibility",
+);
 const validationRules = {
   emailRegex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   passwordRegex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{4,}$/,
 };
 
 const users = [
-  {email}
-]
+  { email: "user1@mail.ru", password: "QAZ!333w" },
+  { email: "user3@mail.ru", password: "QAZ!333w" },
+  { email: "user5@mail.ru", password: "QAZ!333w" },
+];
 
 const formValiodation = {
   email: false,
@@ -20,9 +24,11 @@ const formValiodation = {
 };
 
 const passwordIcons = {
-  eyeOpen: "url(https://api.iconify.design/streamline:visible.svg?color=%23ffffff)",
-  eyeClose:"url(https://api.iconify.design/streamline:invisible-1.svg?color=%23ffffff)"
-}
+  eyeOpen:
+    "url(https://api.iconify.design/streamline:visible.svg?color=%23ffffff)",
+  eyeClose:
+    "url(https://api.iconify.design/streamline:invisible-1.svg?color=%23ffffff)",
+};
 
 const checkSubmitDisabled = function () {
   if (formValiodation.email && formValiodation.password) {
@@ -41,9 +47,22 @@ authForm.addEventListener("submit", (e) => {
     formData.email.match(validationRules.emailRegex) &&
     formData.password.match(validationRules.passwordRegex)
   ) {
-    useSyncExternalStore.forEach((user) => {
-      
-    })
+    // try {
+    //   users.forEach((user) => {
+    //     if (
+    //       formData.email === user.email &&
+    //       formData.password === user.password
+    //     ) {
+    //       console.log(135);
+    //       throw new Erorr("");
+    //     }
+    //   });
+    // } catch (error) {}
+    const isUsers = users.find(
+      (user) =>
+        formData.email === user.email && formData.password === user.password,
+    );
+    console.log(isUsers);
   }
 });
 
@@ -62,9 +81,9 @@ authFormEmail.addEventListener("input", (e) => {
 
 authFormPassword.addEventListener("input", (e) => {
   if (e.target.value) {
-    togglePassworVisibility.classList.remove("hidden")
+    togglePassworVisibility.classList.remove("hidden");
   } else {
-    togglePassworVisibility.classList.add("hidden")
+    togglePassworVisibility.classList.add("hidden");
   }
   if (e.target.value.match(validationRules.passwordRegex)) {
     formValiodation.password = true;
@@ -77,16 +96,15 @@ authFormPassword.addEventListener("input", (e) => {
 });
 
 togglePassworVisibility.addEventListener("click", (e) => {
-
   if (e.target.dataset.visibility == "true") {
     authFormPassword.type = "password";
-    e.target.dataset.visibility = "false"
-    e.target.style.backgroundImage=passwordIcons.eyeOpen
+    e.target.dataset.visibility = "false";
+    e.target.style.backgroundImage = passwordIcons.eyeOpen;
   } else {
     console.log(e.target.dataset.visibility);
     authFormPassword.type = "text";
-    e.target.dataset.visibility = "true"
-    e.target.style.backgroundImage=passwordIcons.eyeClose
+    e.target.dataset.visibility = "true";
+    e.target.style.backgroundImage = passwordIcons.eyeClose;
   }
-  authFormPassword.focus()
+  authFormPassword.focus();
 });
