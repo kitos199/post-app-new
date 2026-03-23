@@ -4,8 +4,11 @@ const authFormPassword = document.querySelector("#auth-form-password");
 const authFormSubmit = document.querySelector("#auth-form-submit");
 const emailEror = document.querySelector("#email-error");
 const passwordError = document.querySelector("#password-error");
-const alertError = document.querySelector('#alert-error')
-const alertClose = document.querySelector('#alert-close')
+const alertError = document.querySelector('#alert-error');
+const alertClose = document.querySelector('#alert-close');
+const registrationLinkInForm = document.querySelector('#registration-link-in-form');
+const registrationLinkInAlert = document.querySelector('#registration-link-in-alert');
+const wrapper = document.querySelector('#wrapper')
 const togglePassworVisibility = document.querySelector(
   "#toggle-passwor-visibility",
 );
@@ -13,6 +16,92 @@ const validationRules = {
   emailRegex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   passwordRegex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{4,}$/,
 };
+
+const authFormMarkup = `<form
+        id="auth-form"
+        class="border border-gray-50/50 rounded-xl flex flex-col p-10 pt-5 gap-3 w-full max-w-md"
+      >
+        <h1 class="text-white text-3xl md-5">Авторизация</h1>
+        <div>
+          <input
+            id="auth-form-email"
+            type="text"
+            name="email"
+            placeholder="Введите почту"
+            class="rounded-md border border-gray-50/50 text-white px-3 py-1 w-full"
+          />
+          <p id="email-error" class="text-red-700 text-xs mt-1 invisible">
+            почта не верна
+          </p>
+        </div>
+        <div class="relative">
+          <input
+            id="auth-form-password"
+            type="password"
+            name="password"
+            placeholder="Введите пароль"
+            class="rounded-md border border-gray-50/50 text-white px-3 py-1 disabled:opacity-75 w-full"
+            disabled
+          />
+          <button id="toggle-passwor-visibility" class="absolute right-1 top-1/4 -translate-y-1/3 w-5 h-5 appearance-none cursor-pointer  bg-no-repeat hidden" style="background-image: url(https://api.iconify.design/streamline:visible.svg?color=%23ffffff);" data-visibility="false"></button>
+
+          <p id="password-error" class="text-red-700 text-xs mt-1 invisible">
+            не верный пароль
+          </p>
+        </div>
+
+        <input
+          id="auth-form-submit"
+          type="submit"
+          value="Войти"
+          class="rounded-md bg-blue-700 text-white px-3 py-1 cursor-pointer hover:bg-blue-800 disabled:opacity-75 disabled:bg-blue-700 disabled:cursor-auto"
+          disabled
+        />
+        <a id="registration-link-in-form" href="#" class="text-blue-700 underline self-center hover:no-underline hover:text-white">Регистрация</a>
+      </form>`
+
+const regFormMarkup =`<form
+        id="auth-form"
+        class="border border-gray-50/50 rounded-xl flex flex-col p-10 pt-5 gap-3 w-full max-w-md"
+      >
+        <h1 class="text-white text-3xl md-5">Авторизация</h1>
+        <div>
+          <input
+            id="auth-form-email"
+            type="text"
+            name="email"
+            placeholder="Введите почту"
+            class="rounded-md border border-gray-50/50 text-white px-3 py-1 w-full"
+          />
+          <p id="email-error" class="text-red-700 text-xs mt-1 invisible">
+            почта не верна
+          </p>
+        </div>
+        <div class="relative">
+          <input
+            id="auth-form-password"
+            type="password"
+            name="password"
+            placeholder="Введите пароль"
+            class="rounded-md border border-gray-50/50 text-white px-3 py-1 disabled:opacity-75 w-full"
+            disabled
+          />
+          <button id="toggle-passwor-visibility" class="absolute right-1 top-1/4 -translate-y-1/3 w-5 h-5 appearance-none cursor-pointer  bg-no-repeat hidden" style="background-image: url(https://api.iconify.design/streamline:visible.svg?color=%23ffffff);" data-visibility="false"></button>
+
+          <p id="password-error" class="text-red-700 text-xs mt-1 invisible">
+            не верный пароль
+          </p>
+        </div>
+
+        <input
+          id="auth-form-submit"
+          type="submit"
+          value="Войти"
+          class="rounded-md bg-blue-700 text-white px-3 py-1 cursor-pointer hover:bg-blue-800 disabled:opacity-75 disabled:bg-blue-700 disabled:cursor-auto"
+          disabled
+        />
+        <a id="registration-link-in-form" href="#" class="text-blue-700 underline self-center hover:no-underline hover:text-white">Регистрация</a>
+      </form>`
 
 const users = [
   { email: "user1@mail.ru", password: "QAZ!333w" },
@@ -42,6 +131,13 @@ const checkSubmitDisabled = function () {
   }
 };
 
+showRegistrationForm = (e) => {
+  e.preventDefault()
+  console.log(135);
+}
+const render = (markup) => {
+  wrapper.insertAdjacentHTML("afterbegin",markup)
+}
 authForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const fromObj = new FormData(e.target);
@@ -129,3 +225,8 @@ alertClose.addEventListener("click", (e) => {
     alertError.classList.add("opacity-0")
   }
 })
+
+registrationLinkInAlert.addEventListener("click", showRegistrationForm);
+registrationLinkInForm.addEventListener("click", showRegistrationForm);
+
+document.addEventListener("DOMContentLoaded",render.bind({},authFormMarkup))
