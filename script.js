@@ -4,6 +4,8 @@ const authFormPassword = document.querySelector("#auth-form-password");
 const authFormSubmit = document.querySelector("#auth-form-submit");
 const emailEror = document.querySelector("#email-error");
 const passwordError = document.querySelector("#password-error");
+const alertError = document.querySelector('#alert-error')
+const alertClose = document.querySelector('#alert-close')
 const togglePassworVisibility = document.querySelector(
   "#toggle-passwor-visibility",
 );
@@ -22,6 +24,8 @@ const formValiodation = {
   email: false,
   password: false,
 };
+
+let isAlertErrorVisible=false
 
 const passwordIcons = {
   eyeOpen:
@@ -62,7 +66,18 @@ authForm.addEventListener("submit", (e) => {
       (user) =>
         formData.email === user.email && formData.password === user.password,
     );
-    console.log(isUsers);
+    if (!isUsers) {
+      alertError.classList.remove("opacity-0")
+      isAlertErrorVisible = true
+      if (isAlertErrorVisible) {
+        setTimeout(() => {
+        alertError.classList.add("opacity-0")
+      },7000)
+    };
+    }
+    else {
+      alert("Вход разрешён")
+    }
   }
 });
 
@@ -108,3 +123,9 @@ togglePassworVisibility.addEventListener("click", (e) => {
   }
   authFormPassword.focus();
 });
+
+alertClose.addEventListener("click", (e) => {
+  if (isAlertErrorVisible) {
+    alertError.classList.add("opacity-0")
+  }
+})
