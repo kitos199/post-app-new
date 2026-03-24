@@ -241,11 +241,13 @@ const init = () => {
     e.preventDefault();
     authForm.remove();
     render(regFormMarkup);
+    init()
   });
   registrationLinkInForm.addEventListener("click", (e) => {
     e.preventDefault()
     authForm.remove();
     render(regFormMarkup);
+    init() 
   });
 };
 document.addEventListener("DOMContentLoaded", () => {
