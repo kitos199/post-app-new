@@ -15,6 +15,8 @@ const validationRules = {
   passwordRegex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{4,}$/,
 };
 
+const formTypes = ["auth","reg"]
+
 const authFormMarkup = `<form
         id="auth-form"
         class="border border-gray-50/50 rounded-xl flex flex-col p-10 pt-5 gap-3 w-full max-w-md"
@@ -133,7 +135,7 @@ const render = (markup) => {
   wrapper.insertAdjacentHTML("afterbegin", markup);
 };
 
-const init = () => {
+const init = (formType) => {
   authForm = document.querySelector("#auth-form");
   authFormEmail = document.querySelector("#auth-form-email");
   authFormPassword = document.querySelector("#auth-form-password");
@@ -159,22 +161,12 @@ const init = () => {
       formData.email.match(validationRules.emailRegex) &&
       formData.password.match(validationRules.passwordRegex)
     ) {
-      // try {
-      //   users.forEach((user) => {
-      //     if (
-      //       formData.email === user.email &&
-      //       formData.password === user.password
-      //     ) {
-      //       console.log(135);
-      //       throw new Erorr("");
-      //     }
-      //   });
-      // } catch (error) {}
-      const isUsers = users.find(
+       const isUsers = users.find(
         (user) =>
           formData.email === user.email && formData.password === user.password,
       );
-      if (!isUsers) {
+      if (formType === formTypes[0]) {
+        if (!isUsers) {
         alertError.classList.remove("opacity-0");
         isAlertErrorVisible = true;
         if (isAlertErrorVisible) {
@@ -183,8 +175,17 @@ const init = () => {
           }, 7000);
         }
       } else {
-        alert("Вход разрешён");
+        location.href = "posts.html"
       }
+      } else if (formType === formTypes[1]) {
+        users.push(formData)
+        console.log(users);
+        authForm.remove()
+        render(authFormMarkup)
+        init(formTypes[0])
+      }
+     
+      
     }
   });
 
@@ -217,7 +218,7 @@ const init = () => {
     checkSubmitDisabled();
   });
 
-  togglePassworVisibility.addEventListener("click", (e) => {
+  togglePassworVisibility.addEventListener("mousedown", (e) => {
     if (e.target.dataset.visibility == "true") {
       authFormPassword.type = "password";
       e.target.dataset.visibility = "false";
@@ -241,16 +242,16 @@ const init = () => {
     e.preventDefault();
     authForm.remove();
     render(regFormMarkup);
-    init()
+    init(formTypes[1])
   });
   registrationLinkInForm.addEventListener("click", (e) => {
     e.preventDefault()
     authForm.remove();
     render(regFormMarkup);
-    init() 
+    init(formTypes[1]) 
   });
 };
 document.addEventListener("DOMContentLoaded", () => {
   render(authFormMarkup);
-  init();
+  init(formTypes[0]);
 });
