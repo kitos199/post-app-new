@@ -1,4 +1,5 @@
 const postsWrapper = document.querySelector('#posts-wrapper');
+const favouriteList = document.querySelector('#favourite-list')
 
 const posts = [
   {
@@ -53,14 +54,37 @@ const posts = [
   }
 ];
 
-const postMarkup = 
+const renderPosts = () => {
 
-
-posts.forEach((post) => {
-    postsWrapper.innerHTML += `<div data-id="${post.id}" class="border rounded-3xl p-3 border-white w-100 h-50 flex gap-5 flex-col">
+  let markup = ''
+const postMarkup =posts.forEach((post) => {
+  markup += `<div data-id="${post.id}" class="border rounded-3xl p-3 border-white w-100 h-50 flex gap-5 flex-col post">
             <h3 class="text-white text-xl font-bold">${post.title}</h3>
             <p class="text-white">${post.description}</p>
             <button class="rounded-md bg-blue-700 text-white px-3 py-1 cursor-pointer hover:bg-blue-800 disabled:opacity-75 disabled:bg-blue-700 disabled:cursor-auto">Добавить в избранное</button>
         </div>
         `
+})
+  postsWrapper.insertAdjacentHTML("beforeend", markup)
+  
+}
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  renderPosts()
+
+  postsWrapper.addEventListener("click", (e) => {
+    if (e.target.matches(".post button")) {
+      // console.log(e.target.closest("div").querySelector('h3'));
+      const title = e.target.parentElement.querySelector("h3").textContent;
+      const favoritesPostMarkup =`<li class="bg-gray-950 rounded-xl p-3 flex justify-between">
+            <span>${title}</span>
+            <button class="cursor-pointer">&times</button>
+            </li>`
+            favouriteList.insertAdjacentHTML("beforeend", favoritesPostMarkup)
+    }
+  })
+
 })
