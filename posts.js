@@ -54,12 +54,14 @@ const posts = [
   }
 ];
 
-const favorites = [];
+
+
+const favourites = [];
 
 const renderPosts = () => {
 
   let markup = ''
-const postMarkup =posts.forEach((post) => {
+const postMarkup = posts.forEach((post) => {
   markup += `<div data-id="${post.id}" class="border rounded-3xl p-3 border-white w-100 min-h-50 flex gap-5 flex-col post">
             <h3 class="text-white text-xl font-bold">${post.title}</h3>
             <p class="text-white">${post.description}</p>
@@ -81,19 +83,20 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.matches(".post button")) {
       const id = Number(e.target.closest("div").dataset.id);
 
-      if (!favorites.includes(id)) {
+      if (!favourites.includes(id)) {
 
       
 
         const post = posts.find(post => id === post.id)
         if (post?.id) {
-          favorites.push(post.id)
-          const favoritesPostMarkup = `<li data-id="${post.id}" class="bg-gray-950 rounded-xl p-3 flex justify-between">
+          favourites.push(post.id)
+          const favouritesPostMarkup = `<li data-id="${post.id}" class="bg-gray-950 rounded-xl p-3 flex justify-between">
              <span>${post.title}</span>
             <button class="cursor-pointer delete-favourite">&times</button>
             </li>`;
-          favouriteList.insertAdjacentHTML("beforeend", favoritesPostMarkup)
-        
+          favouriteList.insertAdjacentHTML("beforeend", favouritesPostMarkup)
+          e.target.disabled = true
+          e.target.textContent = "В избранном"
         } else {
 
           alert("Попробуйте позже")
@@ -106,14 +109,23 @@ document.addEventListener("DOMContentLoaded", () => {
 favouriteList.addEventListener("click", (e) => {
   if (e.target.matches(".delete-favourite")) {
     const id = e.target.parentElement.dataset.id
-    // const post = favorites.find(e => Number(id) === e)
+    // const post = favourites.find(e => Number(id) === e)
     
-    const ind = favorites.indexOf(Number(id));
+    const ind = favourites.indexOf(Number(id));
     if (ind !== -1) {
       
-      favorites.splice(ind, 1);
-      console.log(favorites);
+      favourites.splice(ind, 1);
+      console.log(favourites);
       e.target.parentElement.remove()
+      // 
+      const posts = postsWrapper.querySelectorAll(".post")
+      for (const e of posts) {
+        if (e.dataset.id === id) {
+          button = e.querySelector("button")
+          button.disabled = false;
+          button.textContent = "Добавить в избранное"
+        }
+      }
     } else {
       alert("Попробуйте снова")
     }
