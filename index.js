@@ -104,9 +104,9 @@ const regFormMarkup = `<form
       </form>`;
 
 const users = [
-  { email: "user1@mail.ru", password: "QAZ!333w" },
-  { email: "user3@mail.ru", password: "QAZ!333w" },
-  { email: "user5@mail.ru", password: "QAZ!333w" },
+  {id:1, email: "user1@mail.ru", password: "QAZ!333w" },
+  {id:3, email: "user3@mail.ru", password: "QAZ!333w" },
+  {id:5, email: "user5@mail.ru", password: "QAZ!333w" },
 ];
 
 const formValiodation = {
@@ -174,7 +174,8 @@ const init = (formType) => {
             alertError.classList.add("opacity-0");
           }, 7000);
         }
-      } else {
+        } else {
+          document.cookie = `authUser=${isUsers.id}; path=/; max-age=3600`
         location.href = "posts.html"
       }
       } else if (formType === formTypes[1]) {
