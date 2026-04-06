@@ -64,7 +64,7 @@ const regFormMarkup = `<form
         id="auth-form"
         class="border border-gray-50/50 rounded-xl flex flex-col p-10 pt-5 gap-3 w-full max-w-md"
       >
-        <h1 class="text-white text-3xl md-5">Регистрация</h1>
+        <h1 class="text-white text-3xl mb-5">Регистрация</h1>
         <div>
           <input
             id="auth-form-email"
