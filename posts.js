@@ -1,5 +1,6 @@
 const postsWrapper = document.querySelector('#posts-wrapper');
 const favouriteList = document.querySelector('#favourite-list')
+const logout = document.querySelector('#logout')
 
 // const posts = [
 //   {
@@ -56,9 +57,25 @@ const favouriteList = document.querySelector('#favourite-list')
 
 // localStorage.setItem("posts", JSON.stringify(posts))
 
-const posts = JSON.parse(localStorage.getItem("posts"))
-const favourites = JSON.parse(localStorage.getItem("favoujrites"))
+const getUserId = () => {
+  let userId
+  const cookieArray = document.cookie.split(";");
+cookieArray.forEach((e) => {
+  const [name, value] = e.split("=");
+  if (name === "authUser") {
+    userId = Number(value);
+  }
+})
+  return userId
+}
 
+const userId = getUserId()
+
+
+const posts = JSON.parse(localStorage.getItem("posts"))
+const favourites = JSON.parse(localStorage.getItem("favourites"))?.find(
+  obj => Number(obj.id) === userId)?.posts;
+console.log(favourites);
 const renderFavourites = () => {
   let markup = ''
 
@@ -69,7 +86,8 @@ const renderFavourites = () => {
             <button class="cursor-pointer delete-favourite">&times</button>
             </li>`
   })
-  favouriteList.insertAdjacentHTML("beforeEnd", markup)
+  favouriteList.insertAdjacentHTML("beforeend", markup)
+  console.log(favouriteList);
 }
 
 if (favourites && favourites.length > 0) {
@@ -79,7 +97,7 @@ if (favourites && favourites.length > 0) {
 const renderPosts = () => {
 
   let markup = ''
-const postMarkup = posts.forEach((post) => {
+  posts.forEach((post) => {
   markup += `<div data-id="${post.id}" class="border rounded-3xl p-3 border-white w-100 min-h-50 flex gap-5 flex-col post">
             <h3 class="text-white text-xl font-bold">${post.title}</h3>
             <p class="text-white">${post.description}</p>
@@ -124,9 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
           favouriteList.insertAdjacentHTML("beforeend", favouritesPostMarkup)
           e.target.disabled = true
           e.target.textContent = "В избранном"
-         
+          
         } else {
-
+          
           alert("Попробуйте позже")
 
         }
@@ -157,7 +175,7 @@ favouriteList.addEventListener("click", (e) => {
       const posts = postsWrapper.querySelectorAll(".post")
       for (const e of posts) {
         if (e.dataset.id === id) {
-          button = e.querySelector("button")
+          const button = e.querySelector("button")
           button.disabled = false;
           button.textContent = "Добавить в избранное"
         }
@@ -169,5 +187,9 @@ favouriteList.addEventListener("click", (e) => {
     
           }
         })
-
+  logout.addEventListener("click", () => {
+    document.cookie = "authUser" + "=; max-age=0"
+    location.href = "index.html"
+  })
+  
 })
