@@ -75,10 +75,8 @@ const posts = JSON.parse(localStorage.getItem("posts"));
 let favourites = JSON.parse(localStorage.getItem("favourites"))?.find(
   (obj) => Number(obj.id) === userId,
 )?.posts;
-console.log(favourites);
 const renderFavourites = () => {
   const postUi = postsWrapper.querySelectorAll(".post");
-
   let markup = "";
 
   favourites.forEach((postId) => {
@@ -126,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // let favourites = JSON.parse(localStorage.getItem("favourites"));
       // if (favorutiesLS) {
       //   favorutiesLS.push(id)
-      //   localStorage.setItem("favoriutes", JSON.stringify(favorutiesLS))
+      //   localStorage.setItem("favourites", JSON.stringify(favorutiesLS))
       // }
       // if (!favourites) {
       //   favourites = [];
@@ -134,7 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // if (!favourites.includes(id)) {
         const post = posts.find((post) => id === post.id);
-
         if (post?.id) {
           // favourites.push(id);
           // localStorage.setItem("favourites", JSON.stringify(favourites));
@@ -146,14 +143,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 obj.posts.push(id);
               }
             });
-            localStorage.setItem("favoriutes", JSON.stringify(favouriteList));
+            localStorage.setItem("favourites", JSON.stringify(favouritesLs));
           } else {
             // favouritesLs = [];
             const userObj = {
               id: userId,
               posts:[post.id]
             }
-            localStorage.setItem("favoriutes", JSON.stringify([userObj]));
+            localStorage.setItem("favourites", JSON.stringify([userObj]));
           }
           const favouritesPostMarkup = `<li data-id="${post.id}" class="bg-gray-950 rounded-xl p-3 flex justify-between">
              <span>${post.title}</span>
@@ -175,17 +172,16 @@ document.addEventListener("DOMContentLoaded", () => {
       // const post = favourites.find(e => Number(id) === e)
 
       let favourites = JSON.parse(localStorage.getItem("favourites"));
-
       if (!favourites) {
         alert("Локал сторедж удален");
         favouriteList.textContent = "";
       } else {
-        const ind = favourites.indexOf(Number(id));
+        const ind = favourites.findIndex(e => e.posts.includes(Number(id)));
+        console.log(ind);
 
         if (ind !== -1) {
           favourites.splice(ind, 1);
           localStorage.setItem("favourites", JSON.stringify(favourites));
-          console.log(favourites);
           e.target.parentElement.remove();
           //
           const posts = postsWrapper.querySelectorAll(".post");
