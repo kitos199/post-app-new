@@ -129,29 +129,51 @@ document.addEventListener("DOMContentLoaded", () => {
       // if (!favourites) {
       //   favourites = [];
       // }
-
+      let favourites = JSON.parse(localStorage.getItem("favourites"))?.find(
+        obj => Number(obj.id) === userId
+      )?.posts;
+      if (favourites && favourites.find((e) => e.id === id)) {
+        return
+      }
+      
       // if (!favourites.includes(id)) {
-        const post = posts.find((post) => id === post.id);
-        if (post?.id) {
-          // favourites.push(id);
-          // localStorage.setItem("favourites", JSON.stringify(favourites));
-          const jsonFavouritesLs = localStorage.getItem("favourites");
-          if (jsonFavouritesLs && jsonFavouritesLs.length>0) {
-            const favouritesLs = JSON.parse(jsonFavouritesLs);
-            favouritesLs.forEach((obj) => {
-              if (obj.id === userId) {
-                obj.posts.push(id);
-              }
-            });
-            localStorage.setItem("favourites", JSON.stringify(favouritesLs));
+      const post = posts.find((post) => id === post.id);
+      if (post?.id) {
+        // favourites.push(id);
+        // localStorage.setItem("favourites", JSON.stringify(favourites));
+        // const jsonFavouritesLs = localStorage.getItem("favourites");
+
+        if (!favourites) {
+  favourites = []
+        }
+        favourites.push(post.id)
+        const jsonFavouritesLs = localStorage.getItem("favourites");
+        if (jsonFavouritesLs) {
+          console.log(135);
+          let allUserFavourites = JSON.parse(jsonFavouritesLs)
+          if (allUserFavourites.length === 0) {
+            localStorage.setItem("favourites", {
+              id : userId,
+            posts :[post.id]})
           } else {
-            // favouritesLs = [];
-            const userObj = {
-              id: userId,
-              posts:[post.id]
+            let isUSer = false
+            allUserFavourites.forEach(e => {
+              if (e.id === userId) {
+                e.posts = favourites;
+                isUSer=true
+              }
+              localStorage.setItem("favourites", JSON.stringify(allUserFavourites));
+            });
+            if (isUSer === false) {
+              allUserFavourites.push({
+                
+              })
+               localStorage.setItem("favourites", )
             }
-            localStorage.setItem("favourites", JSON.stringify([userObj]));
           }
+          
+          localStorage.setItem("favourites", JSON.stringify(allUserFavourites));
+          
           const favouritesPostMarkup = `<li data-id="${post.id}" class="bg-gray-950 rounded-xl p-3 flex justify-between">
              <span>${post.title}</span>
             <button class="cursor-pointer delete-favourite">&times</button>
@@ -160,10 +182,38 @@ document.addEventListener("DOMContentLoaded", () => {
           e.target.disabled = true;
           e.target.textContent = "В избранном";
         } else {
-          alert("Попробуйте позже");
+          alert("По пробуйте позже")
         }
-      // }
+      }
     }
+    //       if (jsonFavouritesLs && jsonFavouritesLs.length > 0) {
+    //         const favouritesLs = JSON.parse(jsonFavouritesLs);
+    //         favouritesLs.forEach((obj) => {
+    //           if (obj.id === userId) {
+    //             obj.posts.push(id);
+    //           }
+    //         });
+    //         localStorage.setItem("favourites", JSON.stringify(favouritesLs));
+    //       } else {
+    //         // favouritesLs = [];
+    //         const userObj = {
+    //           id: userId,
+    //           posts:[post.id]
+    //         }
+    //         localStorage.setItem("favourites", JSON.stringify([userObj]));
+    //       }
+    //       const favouritesPostMarkup = `<li data-id="${post.id}" class="bg-gray-950 rounded-xl p-3 flex justify-between">
+    //          <span>${post.title}</span>
+    //         <button class="cursor-pointer delete-favourite">&times</button>
+    //         </li>`;
+    //       favouriteList.insertAdjacentHTML("beforeend", favouritesPostMarkup);
+    //       e.target.disabled = true;
+    //       e.target.textContent = "В избранном";
+    //     } else {
+    //       alert("Попробуйте позже");
+    //     }
+    //   // }
+    // }
   });
 
   favouriteList.addEventListener("click", (e) => {
